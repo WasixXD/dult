@@ -76,7 +76,8 @@ func (w *Worker) Job(mainChan *chan Job) {
 		select {
 		case <-w.timer.C:
 			quit <- true
-			*mainChan <- Job{url: url, agg: w.Agg}
+			j := Job{url: url, agg: w.Agg}
+			*(mainChan) <- j
 			return
 		default:
 			if w.currentVus < w.request.Vus {
@@ -107,6 +108,7 @@ type Dult struct {
 func (d *Dult) FromConfig(conf Configuration) {
 
 	d.NWorkers = len(conf.Requests)
+	d.Handle = make(chan Job)
 
 	for i := range d.NWorkers {
 		r := conf.Requests[i]
@@ -131,14 +133,11 @@ func (d *Dult) Start() {
 	wait := sync.WaitGroup{}
 
 	wait.Add(d.NWorkers)
-	// TODO: SEE WHY THE AGGREGATORS ARENT COMING
 	go func() {
-		fmt.Println("Waiting for aggregators to come")
-		for aggre := range d.Handle {
-			fmt.Println(aggre)
+		for agg := range d.Handle {
+			fmt.Println(agg)
 			wait.Done()
 		}
-
 	}()
 
 	for _, w := range d.Worker {
