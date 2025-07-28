@@ -1,0 +1,13 @@
+{
+    "url": "http://localhost:3000",
+    "requests": [
+        {
+            "type": "GET",
+            "path": "/",
+            "duration": "2s",
+            "spawnRatePerSecond": 3,
+            "vuMax": 20
+        }
+        
+    ]
+}
