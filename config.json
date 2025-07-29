@@ -4,10 +4,9 @@
         {
             "type": "GET",
             "path": "/",
-            "duration": "2s",
+            "duration": "5s",
             "spawnRatePerSecond": 3,
             "vuMax": 20
         }
-        
     ]
 }

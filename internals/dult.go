@@ -109,6 +109,7 @@ func (d *Dult) FromConfig(conf Configuration) {
 
 	d.NWorkers = len(conf.Requests)
 	d.Handle = make(chan Job)
+	d.Aggs = make(map[string]*Aggregator)
 
 	for i := range d.NWorkers {
 		r := conf.Requests[i]
@@ -134,8 +135,12 @@ func (d *Dult) Start() {
 
 	wait.Add(d.NWorkers)
 	go func() {
-		for agg := range d.Handle {
-			fmt.Println(agg)
+		for job := range d.Handle {
+			if d.Aggs[job.url] == nil {
+				d.Aggs[job.url] = &Aggregator{}
+			}
+
+			d.Aggs[job.url].Add(job.agg)
 			wait.Done()
 		}
 	}()
@@ -147,6 +152,6 @@ func (d *Dult) Start() {
 
 		w.cond.Signal()
 	}
-
 	wait.Wait()
+	Render(d.Aggs)
 }
