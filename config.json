@@ -4,9 +4,23 @@
         {
             "type": "GET",
             "path": "/",
-            "duration": "5s",
-            "spawnRatePerSecond": 3,
+            "duration": "10s",
+            "spawnRatePerSecond": 5,
             "vuMax": 20
+        },
+        {
+            "type": "GET",
+            "path": "/users",
+            "duration": "5s",
+            "spawnRatePerSecond": 5,
+            "vuMax": 20
+        },
+        {
+            "type": "GET",
+            "path": "/total",
+            "duration": "10s",
+            "spawnRatePerSecond": 10,
+            "vuMax": 100
         }
     ]
 }

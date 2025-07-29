@@ -50,13 +50,9 @@ func (w *Worker) Job(mainChan *chan Job) {
 	defer w.cond.L.Unlock()
 
 	// wait for our turn
-	fmt.Println("Starting a job")
 	for !w.start {
-		fmt.Println("Waiting for confirmation")
 		w.cond.Wait()
 	}
-
-	fmt.Println("Starting the requests")
 
 	quit := make(chan bool)
 	// listening for the aggregators
@@ -72,25 +68,24 @@ func (w *Worker) Job(mainChan *chan Job) {
 	}()
 
 	url := fmt.Sprintf("%s%s", w.urlMain, w.request.Path)
+	fmt.Printf("Starting the requests to: %s\n", url)
 	for {
 		select {
 		case <-w.timer.C:
 			quit <- true
 			j := Job{url: url, agg: w.Agg}
 			*(mainChan) <- j
+			fmt.Println("DONE")
 			return
 		default:
 			if w.currentVus < w.request.Vus {
 				for range w.request.SpawnRate {
-					fmt.Println(w.currentVus)
-
 					switch w.request.RType {
 					case "GET":
 						go GET(url, w.handle, quit)
 					}
 					w.currentVus++
 				}
-
 			}
 			time.Sleep(time.Second)
 		}

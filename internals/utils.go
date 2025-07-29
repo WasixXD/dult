@@ -69,7 +69,7 @@ func (a *Aggregator) Add(agg Aggregator) {
 
 func (a *Aggregator) Rows() []string {
 	return []string{fmt.Sprintf("%d", a.reqsTotal), fmt.Sprintf("%d", a.sucessReqs), fmt.Sprintf("%d", a.failureReqs),
-		fmt.Sprintf("%f", a.sucessRate), fmt.Sprintf("%f", a.failureRate), a.shortestReq.String(),
+		fmt.Sprintf("%.2f", a.sucessRate), fmt.Sprintf("%.2f", a.failureRate), a.shortestReq.String(),
 		a.longestReq.String(), a.avgReq.String()}
 }
 
